@@ -37,8 +37,11 @@ public final class CountryController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
         List<List<County>> selectedCountries = countyService.getSelectedCountries(countries, criterion);
 
-        return "{\"data\": [" + selectedCountries.parallelStream().map(s -> "{\"name\":\""
+        return "{\"data\": ["
+                + selectedCountries.parallelStream().map(s -> "{\"name\":\""
                 + simpleDateFormat.format(s.get(0).getDate())
-                + "\"," + s.parallelStream().map(c -> "\"" + c.getCountry() + "\": " + c.getCriterion()).collect(Collectors.joining(",")) + "}").collect(Collectors.joining(",")) + "]}";
+                + "\"," + s.parallelStream().map(c -> "\"" + c.getCountry()
+                + "\": " + c.getCriterion()).collect(Collectors.joining(",")) + "}").collect(Collectors.joining(","))
+                + "]}";
     }
 }

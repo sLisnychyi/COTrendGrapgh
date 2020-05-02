@@ -11,7 +11,6 @@ public final class DataSource {
 
     public static BasicDataSource getDataSource() {
         if (dataSource == null) {
-            DataSource.class.getClassLoader();
             try (InputStream input = BasicDataSource.class
                     .getClassLoader().getResourceAsStream("config.properties")) {
                 Properties prop = new Properties();

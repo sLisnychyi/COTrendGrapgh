@@ -31,7 +31,7 @@ public final class CountyService implements CountryDAO {
         List<String> countries = new ArrayList<>();
         Connection connection = basicDataSource.getConnection();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select country from testCovid group by country order by country");
+        ResultSet resultSet = statement.executeQuery("select country from cases group by country order by country");
         while (resultSet.next()) {
             countries.add(resultSet.getString("country"));
         }
@@ -47,7 +47,7 @@ public final class CountyService implements CountryDAO {
         Statement statement = connection.createStatement();
         StringBuilder query = new StringBuilder("select country, date, ");
         query.append(criterion);
-        query.append(" from testCovid where ");
+        query.append(" from cases where ");
         query.append(countries.parallelStream().map(s -> " country =  '" + s + "'").collect(Collectors.joining(" or ")));
         query.append(" order by date");
         ResultSet resultSet = statement.executeQuery(query.toString());

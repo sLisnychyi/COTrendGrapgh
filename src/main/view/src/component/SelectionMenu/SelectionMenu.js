@@ -23,7 +23,11 @@ const useStyles = makeStyles(theme => ({
         marginTop: "15px"
     },
     buttonSubmit: {
-        marginTop: "15px"
+        marginTop: "15px",
+        zIndex:"0"
+    },
+    inputSelect:{
+        zIndex:"-2"
     }
 }));
 
@@ -60,6 +64,10 @@ const SelectionMenu = () => {
     }, []);
 
     const handleChangeActiveCountry = value => {
+
+        let index = countriesSelection.indexOf(value.value);
+        if (index !== -1) countriesSelection.splice(index, 1);
+        setCountriesSelection(countriesSelection);
         setActiveCountrySelection(value.value);
     }
     const handleChangeSelectedCountries = value => {
@@ -85,6 +93,12 @@ const SelectionMenu = () => {
     const handleClose = () => {
         setLoad(false);
     }
+    const getOption = () => {
+        let rem = [...countries];
+        let index = countries.indexOf(activeCountrySelection);
+        if (index !== -1) rem.splice(index, 1);
+        return rem;
+    }
     return (
         <>
             <Grid container className={classes.selectionMenuContainer}>
@@ -97,6 +111,7 @@ const SelectionMenu = () => {
                             Select active country
                         </Typography>
                         <Select
+                            className={classes.selectionMenuContainer}
                             options={countries}
                             value={activeCountrySelection}
                             onChange={handleChangeActiveCountry}
@@ -105,7 +120,8 @@ const SelectionMenu = () => {
                             Select other countries
                         </Typography>
                         <Select
-                            options={countries}
+                            className={classes.selectionMenuContainer}
+                            options={getOption()}
                             value={countriesSelection}
                             onChange={handleChangeSelectedCountries}
                             beforeClose={e => !e.target.classList.contains("dd__option")}
@@ -115,6 +131,7 @@ const SelectionMenu = () => {
                             Select criterion
                         </Typography>
                         <Select
+                            className={classes.selectionMenuContainer}
                             options={[
                                 {value: "confirmed", label: "Confirmed"},
                                 {value: "deaths", label: "Deaths"},
