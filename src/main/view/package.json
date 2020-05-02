@@ -10,6 +10,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "react-select-me": "^1.1.0",
     "recharts": "^1.8.5"
   },
   "scripts": {
