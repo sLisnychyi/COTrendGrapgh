@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/statistic")
 public class StatisticServlet extends HttpServlet {
+    CountryController countryController = CountryController.getInstance();
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -45,12 +47,11 @@ public class StatisticServlet extends HttpServlet {
             }
         }
 
-        CountryController countryController = CountryController.getInstance();
         resp.setContentType("application/json");
         PrintWriter writer = resp.getWriter();
         try {
             writer.println(countryController.getSelectedCountries(countries, criterion));
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
             writer.println("[]");
         }
