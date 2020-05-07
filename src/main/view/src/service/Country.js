@@ -1,3 +1,3 @@
 export default class Country {
-    static getCountry = () => fetch("/country", {method: "GET"}).then(res => res.json());
+    static getCountry = () => fetch("/COTrendGraph_war_exploded/country", {method: "GET"}).then(res => res.json());
 }
