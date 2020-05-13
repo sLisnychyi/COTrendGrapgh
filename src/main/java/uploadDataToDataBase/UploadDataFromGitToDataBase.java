@@ -73,30 +73,30 @@ public class UploadDataFromGitToDataBase {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    private static boolean checkFileByDate(String date) throws IOException {
-        String stringBuffer = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/" +
-                date +
-                ".csv";
-        URL url = new URL(stringBuffer);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.connect();
-        int code = connection.getResponseCode();
-        return code >= 200 && code <= 399;
+    private static boolean checkFileByDate(String date) {
+        try {
+            String stringBuffer = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/" +
+                    date +
+                    ".csv";
+            URL url = new URL(stringBuffer);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+            int code = connection.getResponseCode();
+            return code >= 200 && code <= 399;
+        }catch (IOException e){
+            return false;
+        }
     }
 
 
-    static void uploadToDataBase(String fromDate) throws IOException, ParseException, SQLException {
+    public static void uploadToDataBase(String fromDate) throws IOException, ParseException, SQLException {
         List<String[]> chunks = getChunk(fromDate, Runtime.getRuntime().availableProcessors());
         List<UploadDataToDataBase> task = new ArrayList<>();
         InputStream input = UploadDataFromGitToDataBase.class.getClassLoader().getResourceAsStream("config.properties");
         Properties prop = new Properties();
         prop.load(input);
-        String URL = prop.getProperty("db.url")
-                + "?user="
-                + prop.getProperty("db.user")
-                + "&password="
-                + prop.getProperty("db.password");
+        String URL = prop.getProperty("db.url") + "?user=" + prop.getProperty("db.user") + "&password=" + prop.getProperty("db.password");
 
         for (String[] chunk : chunks) {
             task.add(new UploadDataToDataBase(chunk, DriverManager.getConnection(URL)));
